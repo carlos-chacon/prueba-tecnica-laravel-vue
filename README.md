@@ -79,7 +79,7 @@ docker-compose up -d
 - _Estando en el directorio backend ejecutamos los siguiente comandos:_
 
 ```sh
-docker exec -it app_crud sh
+docker exec -it app_courses sh
 ```
 
 - _Dentro del shell, ejecutamos los siguientes comandos:_

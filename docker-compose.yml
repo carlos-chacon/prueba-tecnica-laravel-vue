@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: digitalocean.com/php
-    container_name: app_crud
+    container_name: app_courses
     restart: unless-stopped
     tty: true
     environment:
@@ -23,7 +23,7 @@ services:
   #Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: webserver_crud
+    container_name: webserver_courses
     restart: unless-stopped
     tty: true
     ports:
@@ -38,13 +38,13 @@ services:
   #MySQL Service
   db:
     image: mysql:5.7.22
-    container_name: db_crud
+    container_name: db_courses
     restart: unless-stopped
     tty: true
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: db_crud
+      MYSQL_DATABASE: db_courses
       MYSQL_ROOT_PASSWORD: 123456
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
