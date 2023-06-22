@@ -28,18 +28,18 @@ const submit = () => {
             link that will allow you to choose a new one.
         </div>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <div v-if="status" class="mb-4 text-sm ">
             {{ status }}
         </div>
 
         <form @submit.prevent="submit">
-            <div>
+            <div class="mb-3">
                 <InputLabel for="email" value="Email" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="form-control"
                     v-model="form.email"
                     required
                     autofocus

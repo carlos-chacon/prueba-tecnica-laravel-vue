@@ -28,14 +28,14 @@ const form = useForm({
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
-            <div>
+        <form @submit.prevent="form.patch(route('profile.update'))" class="" novalidate>
+            <div class="mb-3">
                 <InputLabel for="name" value="Name" />
 
                 <TextInput
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="form-control"
                     v-model="form.name"
                     required
                     autofocus
@@ -45,13 +45,13 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
-            <div>
+            <div class="mb-3">
                 <InputLabel for="email" value="Email" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="form-control"
                     v-model="form.email"
                     required
                     autocomplete="username"
@@ -84,7 +84,7 @@ const form = useForm({
             <div class="flex items-center gap-4">
                 <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0"
+                <Transition enter-from-class="text-opacity-75" leave-to-class="text-opacity-75"
 
                 >
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
