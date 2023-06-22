@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
+ * https://fakerphp.github.io/
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Course>
  */
 class CourseFactory extends Factory
@@ -16,19 +17,20 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
-        $start = $this->faker->dateTime();
-        $end = $this->faker->date();
+        $startDate = $this->faker->dateTimeBetween('-1 year', 'now');
+        $endDate = $this->faker->dateTimeBetween($startDate, '+1 year');
+
         return [
-            'name' => $this->faker->randomElements($this->someCourses(), 1, false),
-            'schedule' => $this->faker->randomElements($this->schedules(), 1, true),
-            'start_date' => $start,
-            'end_date' => $end,
-            'number_students' => 0,
+            'name' => $this->faker->unique()->randomElements($this->someCourses(), 1)[0],
+            'schedule' => $this->faker->randomElements($this->schedules(), 1, true)[0],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            // 'number_students' => 0,
         ];
     }
 
 
-    function someCourses() : array {
+    public function someCourses() : array {
         return [
             'Curso de Programación para Principiantes',
             'Fundamentos de Programación con Python',
@@ -51,7 +53,7 @@ class CourseFactory extends Factory
         ];
     }
 
-    function schedules() : array {
+    public function schedules() : array {
         return [
             'Martes a viernes 7:00 am - 9:00 am o Lunes, martes, miércoles y viernes 7:00 am - 9:00 am',
             'Martes a viernes 11:00 am - 1:00 pm',
