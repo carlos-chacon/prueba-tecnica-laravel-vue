@@ -138,3 +138,9 @@ _El sitio web queda expuesto en **http://127.0.0.1:5173/**_
 * **Carlos Chacón** - *Trabajo Inicial* - [carlos-chacon](https://github.com/carlos-chacon)
 
 ---
+
+php artisan make:model Student -m
+php artisan make:model Course --all
+php artisan migrate:fresh --seed
+php artisan migrate:status
+php artisan migrate:rollback
