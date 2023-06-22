@@ -29,6 +29,15 @@ import NavLink from "@/Components/NavLink.vue";
                             Dashboard
                         </NavLink>
                     </li>
+                    <li class="nav-item">
+                        <NavLink
+                            class="nav-link text-white"
+                            :href="route('student.index')"
+                            :active="route().current('student.index')"
+                        >
+                            Estudiantes
+                        </NavLink>
+                    </li>
                 </ul>
                 <hr class="d-lg-none text-white-50" />
                 <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
