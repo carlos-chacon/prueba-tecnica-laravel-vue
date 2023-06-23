@@ -1,15 +1,15 @@
-import { Response } from "@/interfaces/response-interface";
+import { ResponseInterface } from "@/Interfaces/response-interface";
 
-export interface StudentResponse extends Response {
+export interface StudentResponse extends ResponseInterface {
   data: Students[];
 }
 
 export interface Students {
-  id: number;
+  id?: number;
   name: string;
   last_name: string;
   birth_year: string;
   email: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }

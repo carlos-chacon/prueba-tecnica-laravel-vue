@@ -1,6 +1,6 @@
-export interface Response {
+export interface ResponseInterface {
     current_page: number;
-    data: any[];
+    // data: any[];
     first_page_url: string;
     from: number;
     last_page: number;

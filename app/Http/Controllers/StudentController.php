@@ -9,13 +9,33 @@ use Inertia\Inertia;
 
 class StudentController extends Controller
 {
+    private $numberPage = 10;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('Student/Index', [
-            'students' => Student::paginate(10),
+        $q = request()->has('q') ? request()->get('q') : '';
+
+        $students = Student::query();
+
+        if ($q) {
+            $students->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                    ->orWhere('last_name', 'like', "%{$q}%")
+                    ->orWhere('birth_year', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%")
+                    ->orWhere('created_at', 'like', "%{$q}%")
+                    ->orWhere('updated_at', 'like', "%{$q}%");
+            });
+        }
+
+        $students->orderBy('created_at', 'desc');
+        $resp = $students->paginate($this->numberPage);
+
+        return Inertia::render('Student/StudentList', [
+            'students' => $resp,
+            'q' => $q
         ]);
     }
 
