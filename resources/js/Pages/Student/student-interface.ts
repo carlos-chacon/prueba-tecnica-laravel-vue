@@ -1,4 +1,5 @@
 import { ResponseInterface } from "@/Interfaces/response-interface";
+import { Courses } from "../Course/course-interface";
 
 export interface StudentResponse extends ResponseInterface {
   data: Students[];
@@ -12,4 +13,5 @@ export interface Students {
   email: string;
   created_at?: string;
   updated_at?: string;
+  course?: Courses[];
 }

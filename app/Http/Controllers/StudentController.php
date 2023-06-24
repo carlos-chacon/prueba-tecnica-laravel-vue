@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Models\Course;
+use App\Models\CourseStudent;
 use App\Models\Student;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class StudentController extends Controller
 {
@@ -13,7 +18,7 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $q = request()->has('q') ? request()->get('q') : '';
 
@@ -42,17 +47,23 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('Student/StudentForm', [
+            'student' => null,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStudentRequest $request)
+    public function store(StoreStudentRequest $request): RedirectResponse
     {
-        //
+        $student = new Student;
+        $student->fill($request->all());
+        $student->save();
+
+        return to_route('student.index');
     }
 
     /**
@@ -60,7 +71,6 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
     }
 
     /**
@@ -68,22 +78,43 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        $student->course;
+        return Inertia::render('Student/StudentForm', [
+            'student' => $student
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentRequest $request, Student $student)
+    public function update(UpdateStudentRequest $request, Student $student): RedirectResponse
     {
-        //
+        $student->fill($request->all());
+        $student->save();
+
+        return to_route('student.edit', $student);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(Student $student): RedirectResponse
     {
-        //
+        $student->delete();
+        return to_route('student.index');
+    }
+
+    function addCourse(Request $request, Student $student): RedirectResponse
+    {
+        $courseId = $request->get('course_id');
+        $student->course()->syncWithoutDetaching($courseId);
+        return to_route('student.edit', $student);
+    }
+
+    function deleteCourse(Request $request, Student $student): RedirectResponse
+    {
+        $courseId = $request->get('course_id');
+        $student->course()->detach($courseId);
+        return to_route('student.edit', $student);
     }
 }

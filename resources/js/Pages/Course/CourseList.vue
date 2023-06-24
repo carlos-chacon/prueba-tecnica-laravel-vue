@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Head, Link, router } from "@inertiajs/vue3";
 import Swal from 'sweetalert2';
-import { StudentResponse, Students } from "@/Pages/Student/student-interface";
+import moment from 'moment';
+import { CourseResponse, Courses } from "./course-interface";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TableComponent from "@/Components/TableComponent.vue";
 import PaginationComponent from "@/Components/PaginationComponent.vue";
@@ -10,32 +11,33 @@ import DangerButton from "@/Components/DangerButton.vue";
 import { ResponseInterface } from "@/Interfaces/response-interface";
 
 defineProps<{
-    students?: StudentResponse;
+    courses?: CourseResponse;
     q: string;
 }>();
 
 const nameColumns = [
     "Nombre",
-    "Apellido",
-    "Edad",
-    "Correo Electrónico",
+    "Horario",
+    "Fecha Inicio",
+    "Fecha Fin",
+    "Estudiantes",
     "Fecha Creación",
     "Fecha Actualización",
 ];
 
 const search = (q: string) => {
-    router.get(route("student.index", { q: q }));
+    router.get(route("course.index", { q: q }));
 };
 
-const deleteStudent = (student: Students) => {
+const deleteStudent = (course: Courses) => {
     Swal.fire({
-    title: `Desea eliminar el estudiante: ${student.name} ${student.last_name}`,
+    title: `Desea eliminar el curso: ${course.name}`,
     showCancelButton: true,
     showLoaderOnConfirm: true,
     confirmButtonText: 'OK',
     preConfirm: () => {
-        router.delete(route('student.destroy', student.id));
-        return student
+        router.delete(route('course.destroy', course.id));
+        return course
     }
   })
 }
@@ -43,11 +45,11 @@ const deleteStudent = (student: Students) => {
 </script>
 
 <template>
-    <Head title="Estudiantes" />
+    <Head title="Cursos" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="">Estudiantes</h2>
+            <h2 class="">Cursos</h2>
         </template>
 
         <div class="">
@@ -55,7 +57,7 @@ const deleteStudent = (student: Students) => {
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                     <Link
                         class="btn btn-primary mb-2"
-                        :href="route('student.create')"
+                        :href="route('course.create')"
                         aria-label="Previous"
                     >
                         <i class="bi bi-plus-circle"></i> Nuevo
@@ -65,26 +67,27 @@ const deleteStudent = (student: Students) => {
 
                     <TableComponent
                         :name-columns="nameColumns"
-                        title="Listado de Estudiantes"
+                        title="Listado de Cursos"
                     >
-                        <tr v-for="student in students?.data">
-                            <th scope="row">{{ student.name }}</th>
-                            <td>{{ student.last_name }}</td>
-                            <td>{{ student.birth_year }}</td>
-                            <td>{{ student.email }}</td>
-                            <td>{{ student.created_at }}</td>
-                            <td>{{ student.updated_at }}</td>
+                        <tr v-for="course in courses?.data">
+                            <th scope="row">{{ course.name }}</th>
+                            <td>{{ course.schedule }}</td>
+                            <td>{{ moment(course.start_date).format('DD-MM-YYYY hh:mm A') }}</td>
+                            <td>{{ moment(course.end_date).format('DD-MM-YYYY hh:mm A') }}</td>
+                            <td>{{ course.number_students }}</td>
+                            <td>{{ course.created_at }}</td>
+                            <td>{{ course.updated_at }}</td>
                             <td>
                                 <div class="d-flex">
                                     <Link
                                         class="btn btn-success me-2"
-                                        :href="route('student.edit', student.id)"
+                                        :href="route('course.edit', course.id)"
                                         aria-label="Previous"
                                     >
                                     <i class="bi bi-pencil"></i>
                                     </Link>
 
-                                    <DangerButton @click="deleteStudent(student)">
+                                    <DangerButton @click="deleteStudent(course)">
                                         <i class="bi bi-trash3"></i>
                                     </DangerButton>
                                 </div>
@@ -92,8 +95,8 @@ const deleteStudent = (student: Students) => {
                         </tr>
                     </TableComponent>
 
-                    <PaginationComponent :route="'/student'"
-                        :paginate="(students as ResponseInterface)"
+                    <PaginationComponent
+                        :paginate="(courses as ResponseInterface)" :route="'/course'"
                     />
                 </div>
             </div>

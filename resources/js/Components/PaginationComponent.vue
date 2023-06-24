@@ -4,6 +4,7 @@ import { Link } from "@inertiajs/vue3";
 
 defineProps<{
     paginate: ResponseInterface;
+    route: string;
 }>();
 </script>
 
@@ -26,7 +27,7 @@ defineProps<{
                     v-if="index === 0"
                     class="page-link"
                     :class="{'disabled':!link.url}"
-                    href="/student"  :data="{ page: link.url ? paginate.current_page-1 : null }"
+                    :href="route"  :data="{ page: link.url ? paginate.current_page-1 : null }"
                     aria-label="Previous"
                 >
                     <span aria-hidden="true">&laquo;</span>
@@ -34,14 +35,14 @@ defineProps<{
 
                 <Link v-if="
                         !(index === 0) && !(index === paginate.links.length - 1)
-                    " class="page-link" :class="{'active': link.active}"
-                    :active="link.active" href="/student"  :data="{ page: link.label }">{{ link.label }}</Link>
+                    " class="page-link" :class="{'active': link.active, 'disabled':!link.url}"
+                    :active="link.active" :href="route"  :data="{ page: link.label }">{{ link.label }}</Link>
 
                 <Link
                     v-if="index === paginate.links.length - 1"
                     class="page-link"
                     :class="{'disabled':!link.url}"
-                    href="/student"  :data="{ page: link.url ? paginate.current_page+1 : null }"
+                    :href="route"  :data="{ page: link.url ? paginate.current_page+1 : null }"
                     aria-label="Next"
                 >
                     <span aria-hidden="true">&raquo;</span>
