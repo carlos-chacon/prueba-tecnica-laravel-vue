@@ -3,7 +3,7 @@ import NavLink from "@/Components/NavLink.vue";
 </script>
 
 <template>
-    <nav class="navbar navbar-expand-lg bg-dark py-3">
+    <nav class="navbar navbar-expand-lg bg-dark py-3 fixed-top">
         <div class="container-fluid ">
             <a class="navbar-brand text-white" href="#">PHP - Vue</a>
             <button
@@ -90,3 +90,9 @@ import NavLink from "@/Components/NavLink.vue";
         </div>
     </nav>
 </template>
+
+<style>
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: #8b8b8b !important;
+}
+</style>

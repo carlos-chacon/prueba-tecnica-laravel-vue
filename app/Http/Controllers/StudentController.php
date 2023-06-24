@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Course;
-use App\Models\CourseStudent;
 use App\Models\Student;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -121,4 +121,14 @@ class StudentController extends Controller
         return to_route('student.edit', $student);
     }
 
+
+    function listStudent($q)
+    {
+        $students = Student::select('*', DB::raw("CONCAT(name, ' ', last_name) AS full_name"))->where('name', 'like', "%{$q}%")
+            ->orWhere('last_name', 'like', "%{$q}%")
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return response()->json($students);
+    }
 }

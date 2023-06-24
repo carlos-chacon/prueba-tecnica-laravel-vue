@@ -100,4 +100,13 @@ class CourseController extends Controller
         $course->delete();
         to_route('course.index');
     }
+
+    function listCourse($q)
+    {
+        $courses = Course::where('name', 'like', "%{$q}%")
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return response()->json($courses);
+    }
 }

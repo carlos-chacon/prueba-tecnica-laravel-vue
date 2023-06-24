@@ -29,18 +29,12 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function() {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/store', [DashboardController::class, 'store'])->name('course_student.store');
     Route::delete('/destroy/{student}', [DashboardController::class, 'destroy'])->name('course_student.destroy');
-    // Route::get('/create', [DashboardController::class, 'create'])->name('course_student.create');
-    // Route::get('/show/{course_student}', [DashboardController::class, 'show'])->name('course_student.show');
-    // Route::get('/edit/{course_student}', [DashboardController::class, 'edit'])->name('course_student.edit');
-    // Route::patch('/update/{course_student}', [DashboardController::class, 'update'])->name('course_student.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -62,6 +56,7 @@ Route::middleware('auth')->prefix('student')->group(function() {
     Route::post('/course/{student}', [StudentController::class, 'addCourse'])->name('student.add-course');
     Route::delete('/course/{student}', [StudentController::class, 'deleteCourse'])->name('student.delete-course');
     Route::get('/list-courses/{student}', [StudentController::class, 'listCourses'])->name('student.list-courses');
+    Route::get('/list-student/{q}', [StudentController::class, 'listStudent'])->name('student.list-student');
 });
 
 Route::middleware('auth')->prefix('course')->group(function() {
@@ -72,6 +67,7 @@ Route::middleware('auth')->prefix('course')->group(function() {
     Route::get('/edit/{course}', [CourseController::class, 'edit'])->name('course.edit');
     Route::patch('/update/{course}', [CourseController::class, 'update'])->name('course.update');
     Route::delete('/destroy/{course}', [CourseController::class, 'destroy'])->name('course.destroy');
+    Route::get('/list-course/{q}', [CourseController::class, 'listCourse'])->name('student.list-course');
 });
 
 require __DIR__.'/auth.php';

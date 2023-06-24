@@ -7,7 +7,7 @@ import MenuLayout from "./MenuLayout.vue";
     <div class="bg-body-secondary min-vh-100">
         <MenuLayout />
 
-        <div class="">
+        <div style="margin-top: 72px;">
             <!-- Page Heading -->
             <header v-if="$slots.header" class="bg-white shadow">
                 <div class="max-w-7xl py-3 mx-auto px-4 sm:px-5 lg:px-4">

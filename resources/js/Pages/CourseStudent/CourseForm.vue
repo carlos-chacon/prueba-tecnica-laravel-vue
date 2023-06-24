@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import InputError from "@/Components/InputError.vue";
 import { useForm } from "@inertiajs/vue3";
+import { reactive } from "vue";
+
+const c = {controller: new AbortController()};
 
 defineProps<{
     errors: { student_id: string; course_id: string };
@@ -16,37 +19,100 @@ const submit = () => {
         preserveScroll: true,
         onFinish: () => {},
         onSuccess: () => {
-            form.student_id = '';
-            form.course_id = '';
-        }
+            form.student_id = "";
+            form.course_id = "";
+        },
     });
+};
+
+const options = reactive({
+    lvStudent: [],
+    lvCourse: [],
+});
+
+const fetchOptions = (search: string, loading: Function) => {
+    if (search.length) {
+        loading(true);
+
+        c.controller.abort();
+        c.controller = new AbortController();
+        const signal = c.controller.signal;
+
+        fetch(`student/list-student/${search}`, {signal})
+            .then((resp) => resp.json())
+            .then((data) => {
+                options.lvStudent = data;
+                loading(false);
+            })
+            .catch((err) => {
+                loading(false);
+            });
+    }
+};
+
+const fetchOptionsCourse = (search: string, loading: Function) => {
+    if (search.length) {
+        loading(true);
+
+        c.controller.abort();
+        c.controller = new AbortController();
+        const signal = c.controller.signal;
+
+        fetch(`course/list-course/${search}`, {signal})
+            .then((resp) => resp.json())
+            .then((data) => {
+                options.lvCourse = data;
+                loading(false);
+            })
+            .catch((err) => {
+                loading(false);
+            });
+    }
 };
 </script>
 
 <template>
     <form @submit.prevent="submit" novalidate class="was-validated">
-        <div class="form-floating mb-3">
-            <input
-                type="text"
-                class="form-control"
-                id="name"
-                placeholder="Estudiante"
+        <div class="mb-2">
+            <label for="student_id">Estudiante</label>
+            <v-select
+                :options="options.lvStudent"
                 v-model="form.student_id"
-                required
-            />
-            <label for="name">Estudiante</label>
+                label="full_name"
+                @search="fetchOptions"
+                :reduce="(option: any) => option.id"
+            >
+                <template #search="{ attributes, events }">
+                    <input
+                        id="student_id"
+                        class="vs__search"
+                        required
+                        v-bind="attributes"
+                        v-on="events"
+                    />
+                </template>
+            </v-select>
             <InputError :message="errors.student_id" class="mt-2" />
         </div>
-        <div class="form-floating mb-3">
-            <input
-                type="text"
-                class="form-control"
-                id="last_name"
-                placeholder="Curso"
+        <div class="mb-2">
+            <label for="course_id">Curso</label>
+            <v-select
+                :options="options.lvCourse"
                 v-model="form.course_id"
-                required
-            />
-            <label for="last_name">Curso</label>
+                label="name"
+                @search="fetchOptionsCourse"
+                :reduce="(option: any) => option.id"
+            >
+                <template #search="{ attributes, events }">
+                    <input
+                        id="course_id"
+                        class="vs__search"
+                        required
+                        v-bind="attributes"
+                        v-on="events"
+                    />
+                </template>
+            </v-select>
             <InputError :message="errors.course_id" class="mt-2" />
         </div>
 
