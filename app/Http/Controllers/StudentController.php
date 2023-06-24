@@ -40,7 +40,7 @@ class StudentController extends Controller
 
         return Inertia::render('Student/StudentList', [
             'students' => $resp,
-            'q' => $q
+            'q' => $q,
         ]);
     }
 
@@ -78,9 +78,12 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
+        $lvCourses = Course::orderBy('name', 'asc')->get();
         $student->course;
+
         return Inertia::render('Student/StudentForm', [
-            'student' => $student
+            'student' => $student,
+            'lvCourses' => $lvCourses,
         ]);
     }
 
@@ -117,4 +120,5 @@ class StudentController extends Controller
         $student->course()->detach($courseId);
         return to_route('student.edit', $student);
     }
+
 }

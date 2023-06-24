@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseStudentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Foundation\Application;
@@ -28,9 +29,19 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function() {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/store', [DashboardController::class, 'store'])->name('course_student.store');
+    Route::delete('/destroy/{student}', [DashboardController::class, 'destroy'])->name('course_student.destroy');
+    // Route::get('/create', [DashboardController::class, 'create'])->name('course_student.create');
+    // Route::get('/show/{course_student}', [DashboardController::class, 'show'])->name('course_student.show');
+    // Route::get('/edit/{course_student}', [DashboardController::class, 'edit'])->name('course_student.edit');
+    // Route::patch('/update/{course_student}', [DashboardController::class, 'update'])->name('course_student.update');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -50,6 +61,7 @@ Route::middleware('auth')->prefix('student')->group(function() {
     Route::delete('/destroy/{student}', [StudentController::class, 'destroy'])->name('student.destroy');
     Route::post('/course/{student}', [StudentController::class, 'addCourse'])->name('student.add-course');
     Route::delete('/course/{student}', [StudentController::class, 'deleteCourse'])->name('student.delete-course');
+    Route::get('/list-courses/{student}', [StudentController::class, 'listCourses'])->name('student.list-courses');
 });
 
 Route::middleware('auth')->prefix('course')->group(function() {
@@ -60,17 +72,6 @@ Route::middleware('auth')->prefix('course')->group(function() {
     Route::get('/edit/{course}', [CourseController::class, 'edit'])->name('course.edit');
     Route::patch('/update/{course}', [CourseController::class, 'update'])->name('course.update');
     Route::delete('/destroy/{course}', [CourseController::class, 'destroy'])->name('course.destroy');
-    Route::post('/list', [CourseController::class, 'list'])->name('course.list');
-});
-
-Route::middleware('auth')->prefix('course_student')->group(function() {
-    Route::get('/', [CourseStudentController::class, 'index'])->name('course_student.index');
-    Route::get('/create', [CourseStudentController::class, 'create'])->name('course_student.create');
-    Route::post('/store', [CourseStudentController::class, 'store'])->name('course_student.store');
-    Route::get('/show/{course_student}', [CourseStudentController::class, 'show'])->name('course_student.show');
-    Route::get('/edit/{course_student}', [CourseStudentController::class, 'edit'])->name('course_student.edit');
-    Route::patch('/update/{course_student}', [CourseStudentController::class, 'update'])->name('course_student.update');
-    Route::delete('/destroy/{course_student}', [CourseStudentController::class, 'destroy'])->name('course_student.destroy');
 });
 
 require __DIR__.'/auth.php';

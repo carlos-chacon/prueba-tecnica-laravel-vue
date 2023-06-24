@@ -23,7 +23,7 @@ defineProps<{
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
             <li class="page-item" v-for="(link, index) in paginate.links">
-                <Link
+                <Link preserve-scroll
                     v-if="index === 0"
                     class="page-link"
                     :class="{'disabled':!link.url}"
@@ -33,12 +33,12 @@ defineProps<{
                     <span aria-hidden="true">&laquo;</span>
                 </Link>
 
-                <Link v-if="
+                <Link preserve-scroll v-if="
                         !(index === 0) && !(index === paginate.links.length - 1)
                     " class="page-link" :class="{'active': link.active, 'disabled':!link.url}"
                     :active="link.active" :href="route"  :data="{ page: link.label }">{{ link.label }}</Link>
 
-                <Link
+                <Link preserve-scroll
                     v-if="index === paginate.links.length - 1"
                     class="page-link"
                     :class="{'disabled':!link.url}"

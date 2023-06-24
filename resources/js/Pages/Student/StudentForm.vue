@@ -8,7 +8,6 @@ import InputError from "@/Components/InputError.vue";
 import { Courses } from "../Course/course-interface";
 import TableComponent from "@/Components/TableComponent.vue";
 import DangerButton from "@/Components/DangerButton.vue";
-import { onMounted } from "vue";
 
 const props = defineProps<{
     student?: Students;
@@ -70,21 +69,6 @@ const addCourse = () => {
     });
 };
 
-const listCourses = () => {};
-
-onMounted(() => {
-    router.visit(route("course.list"), {
-        data: {
-            name_component: "Student/StudentForm",
-        },
-        method: "post",
-        only: ["lvCourses"],
-        preserveState: true,
-        onSuccess: (resp) => {
-            console.log(resp);
-        },
-    });
-});
 </script>
 
 <template>
@@ -209,7 +193,6 @@ onMounted(() => {
                                 aria-label="Agregar un curso al estudiante"
                                 aria-describedby="agregar-curso"
                                 v-model="formAddCourse.course_id"
-                                @click="listCourses"
                             >
                                 <option disabled value="">
                                     Agregar un curso al estudiante
@@ -251,6 +234,7 @@ onMounted(() => {
                                 'Finaliza',
                             ]"
                             title="Listado de Cursos"
+                            :active-action="true"
                         >
                             <tr v-for="course in student?.course">
                                 <th scope="row">{{ course.name }}</th>

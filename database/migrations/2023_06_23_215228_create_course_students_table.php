@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('course_id');
+            $table->timestamp('created_at')->useCurrent();
             // $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students');

@@ -38,7 +38,7 @@ class CourseController extends Controller
 
         return Inertia::render('Course/CourseList', [
             'courses' => $resp,
-            'q' => $q
+            'q' => $q,
         ]);
     }
 
@@ -99,15 +99,5 @@ class CourseController extends Controller
     {
         $course->delete();
         to_route('course.index');
-    }
-
-    function list()
-    {
-        $nameComponent = request()->get('name_component');
-        $lvCourses = Course::orderBy('name', 'asc')->get();
-
-        return Inertia::render($nameComponent, [
-            'lvCourses' => $lvCourses
-        ]);
     }
 }

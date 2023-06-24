@@ -68,6 +68,7 @@ const deleteStudent = (course: Courses) => {
                     <TableComponent
                         :name-columns="nameColumns"
                         title="Listado de Cursos"
+                        :active-action="true"
                     >
                         <tr v-for="course in courses?.data">
                             <th scope="row">{{ course.name }}</th>

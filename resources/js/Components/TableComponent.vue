@@ -1,14 +1,15 @@
 <script setup lang="ts">
 defineProps<{
     nameColumns: string[];
-    title: string;
+    title?: string;
+    activeAction: boolean,
 }>();
 </script>
 
 <template>
     <div class="table-responsive">
         <table class="table table-hover">
-            <caption class="caption-top">
+            <caption class="caption-top" v-if="title">
                 {{ title }}
             </caption>
             <thead>
@@ -16,7 +17,7 @@ defineProps<{
                     <th scope="col" v-for="column in nameColumns">
                         {{ column }}
                     </th>
-                    <th scope="col">Acción</th>
+                    <th scope="col" v-if="activeAction">Acción</th>
                 </tr>
             </thead>
             <tbody>

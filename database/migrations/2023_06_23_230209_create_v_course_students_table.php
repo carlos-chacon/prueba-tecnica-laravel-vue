@@ -12,6 +12,7 @@ return new class extends Migration
      */
     public function up()
     {
+        DB::statement($this->dropView());
         DB::statement($this->createView());
     }
 
@@ -27,6 +28,7 @@ return new class extends Migration
 
     private function createView(): string
     {
+
         return "CREATE VIEW v_course_student AS
                 SELECT
                     cs.id,
@@ -35,8 +37,7 @@ return new class extends Migration
                     s.last_name ,
                     cs.course_id ,
                     c.name name_course,
-                    cs.created_at ,
-                    cs.updated_at
+                    cs.created_at
                 FROM
                     course_student cs ,
                     students s ,
@@ -53,6 +54,6 @@ return new class extends Migration
      */
     private function dropView(): string
     {
-        return "DROP VIEW IF EXISTS `v_course_student`";
+        return "DROP VIEW IF EXISTS v_course_student";
     }
 };
