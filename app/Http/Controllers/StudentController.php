@@ -103,8 +103,15 @@ class StudentController extends Controller
      */
     public function destroy(Student $student): RedirectResponse
     {
-        $student->delete();
-        return to_route('student.index');
+
+        $errors = [];
+        $delete =  $student->delete();
+        if (!$delete) {
+            $errors = [
+                'delete_student' => 'No fue posible eliminar el estudiante. El estudiante tiene asignado algunos cursos.'
+            ];
+        }
+        return to_route('student.index')->withErrors($errors);
     }
 
     function addCourse(Request $request, Student $student): RedirectResponse

@@ -10,6 +10,7 @@ export interface Students {
   name: string;
   last_name: string;
   birth_year: string;
+  age: number;
   email: string;
   created_at?: string;
   updated_at?: string;

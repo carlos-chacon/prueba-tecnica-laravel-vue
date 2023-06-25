@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -97,8 +98,15 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
-        to_route('course.index');
+
+        $errors = [];
+        $delete =  $course->delete();
+        if (!$delete) {
+            $errors = [
+                'delete_course' => 'No fue posible eliminar el curso. El curso esta asignado a estudiantes.'
+            ];
+        }
+        to_route('course.index')->withErrors($errors);
     }
 
     function listCourse($q)

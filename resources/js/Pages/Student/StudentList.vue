@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from "@inertiajs/vue3";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { StudentResponse, Students } from "@/Pages/Student/student-interface";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TableComponent from "@/Components/TableComponent.vue";
@@ -12,6 +12,7 @@ import { ResponseInterface } from "@/Interfaces/response-interface";
 defineProps<{
     students?: StudentResponse;
     q: string;
+    errors: { delete_student: string };
 }>();
 
 const nameColumns = [
@@ -29,17 +30,16 @@ const search = (q: string) => {
 
 const deleteStudent = (student: Students) => {
     Swal.fire({
-    title: `Desea eliminar el estudiante: ${student.name} ${student.last_name}`,
-    showCancelButton: true,
-    showLoaderOnConfirm: true,
-    confirmButtonText: 'OK',
-    preConfirm: () => {
-        router.delete(route('student.destroy', student.id));
-        return student
-    }
-  })
-}
-
+        title: `Desea eliminar el estudiante: ${student.name} ${student.last_name}`,
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        confirmButtonText: "OK",
+        preConfirm: () => {
+            router.delete(route("student.destroy", student.id));
+            return student;
+        },
+    });
+};
 </script>
 
 <template>
@@ -53,6 +53,13 @@ const deleteStudent = (student: Students) => {
         <div class="">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <div
+                        class="alert alert-warning"
+                        role="alert"
+                        v-if="errors.delete_student"
+                    >
+                        {{ errors.delete_student }}
+                    </div>
                     <Link
                         class="btn btn-primary mb-2"
                         :href="route('student.create')"
@@ -71,7 +78,7 @@ const deleteStudent = (student: Students) => {
                         <tr v-for="student in students?.data">
                             <th scope="row">{{ student.name }}</th>
                             <td>{{ student.last_name }}</td>
-                            <td>{{ student.birth_year }}</td>
+                            <td class="text-center">{{ student.age }}</td>
                             <td>{{ student.email }}</td>
                             <td>{{ student.created_at }}</td>
                             <td>{{ student.updated_at }}</td>
@@ -79,13 +86,17 @@ const deleteStudent = (student: Students) => {
                                 <div class="d-flex">
                                     <Link
                                         class="btn btn-success me-2"
-                                        :href="route('student.edit', student.id)"
+                                        :href="
+                                            route('student.edit', student.id)
+                                        "
                                         aria-label="Previous"
                                     >
-                                    <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-pencil"></i>
                                     </Link>
 
-                                    <DangerButton @click="deleteStudent(student)">
+                                    <DangerButton
+                                        @click="deleteStudent(student)"
+                                    >
                                         <i class="bi bi-trash3"></i>
                                     </DangerButton>
                                 </div>
@@ -93,7 +104,8 @@ const deleteStudent = (student: Students) => {
                         </tr>
                     </TableComponent>
 
-                    <PaginationComponent :route="'/student'"
+                    <PaginationComponent
+                        :route="'/student'"
                         :paginate="(students as ResponseInterface)"
                     />
                 </div>

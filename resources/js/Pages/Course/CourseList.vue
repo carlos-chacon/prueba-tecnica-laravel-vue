@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from "@inertiajs/vue3";
-import Swal from 'sweetalert2';
-import moment from 'moment';
+import Swal from "sweetalert2";
+import moment from "moment";
 import { CourseResponse, Courses } from "./course-interface";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TableComponent from "@/Components/TableComponent.vue";
@@ -13,6 +13,7 @@ import { ResponseInterface } from "@/Interfaces/response-interface";
 defineProps<{
     courses?: CourseResponse;
     q: string;
+    errors: { delete_course: string };
 }>();
 
 const nameColumns = [
@@ -31,17 +32,16 @@ const search = (q: string) => {
 
 const deleteStudent = (course: Courses) => {
     Swal.fire({
-    title: `Desea eliminar el curso: ${course.name}`,
-    showCancelButton: true,
-    showLoaderOnConfirm: true,
-    confirmButtonText: 'OK',
-    preConfirm: () => {
-        router.delete(route('course.destroy', course.id));
-        return course
-    }
-  })
-}
-
+        title: `Desea eliminar el curso: ${course.name}`,
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        confirmButtonText: "OK",
+        preConfirm: () => {
+            router.delete(route("course.destroy", course.id));
+            return course;
+        },
+    });
+};
 </script>
 
 <template>
@@ -55,6 +55,9 @@ const deleteStudent = (course: Courses) => {
         <div class="">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <div class="alert alert-warning" role="alert" v-if="errors.delete_course">
+                        {{ errors.delete_course }}
+                    </div>
                     <Link
                         class="btn btn-primary mb-2"
                         :href="route('course.create')"
@@ -73,8 +76,20 @@ const deleteStudent = (course: Courses) => {
                         <tr v-for="course in courses?.data">
                             <th scope="row">{{ course.name }}</th>
                             <td>{{ course.schedule }}</td>
-                            <td>{{ moment(course.start_date).format('DD-MM-YYYY hh:mm A') }}</td>
-                            <td>{{ moment(course.end_date).format('DD-MM-YYYY hh:mm A') }}</td>
+                            <td>
+                                {{
+                                    moment(course.start_date).format(
+                                        "DD-MM-YYYY hh:mm A"
+                                    )
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    moment(course.end_date).format(
+                                        "DD-MM-YYYY hh:mm A"
+                                    )
+                                }}
+                            </td>
                             <td>{{ course.number_students }}</td>
                             <td>{{ course.created_at }}</td>
                             <td>{{ course.updated_at }}</td>
@@ -85,10 +100,12 @@ const deleteStudent = (course: Courses) => {
                                         :href="route('course.edit', course.id)"
                                         aria-label="Previous"
                                     >
-                                    <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-pencil"></i>
                                     </Link>
 
-                                    <DangerButton @click="deleteStudent(course)">
+                                    <DangerButton
+                                        @click="deleteStudent(course)"
+                                    >
                                         <i class="bi bi-trash3"></i>
                                     </DangerButton>
                                 </div>
@@ -97,7 +114,8 @@ const deleteStudent = (course: Courses) => {
                     </TableComponent>
 
                     <PaginationComponent
-                        :paginate="(courses as ResponseInterface)" :route="'/course'"
+                        :paginate="(courses as ResponseInterface)"
+                        :route="'/course'"
                     />
                 </div>
             </div>

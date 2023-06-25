@@ -28,8 +28,8 @@ _Construya una aplicación web con estructura monolítica con Laravel que permit
 
 ## Pre-requisitos 📋
 
-- [Docker](https://www.docker.com/)
-- [Node.js](https://nodejs.org/en/download/)
+- [Docker (4.16.0)](https://www.docker.com/)
+- [Node.js (v16.17.0)](https://nodejs.org/en/download/)
 
 ## Comenzando 🚀
 
@@ -94,12 +94,12 @@ _Nos ubicamos en el directorio raíz del proyecto, y ejecutamos los siguientes c
 npm install
 ```
 
-_Comando para ejecutar el frontend en modo desarrollo:_
+<!-- _Comando para ejecutar el frontend en modo desarrollo:_
 ```sh
 npm run dev
-```
+``` -->
 
-_o comando para modo producción_
+_comando para modo producción_
 ``` sh
 npm run build
 ```
